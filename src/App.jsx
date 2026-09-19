@@ -1,122 +1,115 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Input, Table } from "./ui";
+import { calcularNota } from "./NotaScale";
+import IncrementSelector from "./IncrementSelector";
+import './App.css';
+
+const DEFAULTS = {
+  puntajeMax: 50,
+  exigencia: 0.6,
+  notaMin: 1,
+  notaMax: 7,
+  notaAprobacion: 4,
+  incremento: 1,
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [puntajeMax, setPuntajeMax] = useState(DEFAULTS.puntajeMax);
+  const [exigencia, setExigencia] = useState(DEFAULTS.exigencia);
+  const [notaMin, setNotaMin] = useState(DEFAULTS.notaMin);
+  const [notaMax, setNotaMax] = useState(DEFAULTS.notaMax);
+  const [notaAprobacion, setNotaAprobacion] = useState(DEFAULTS.notaAprobacion);
+  const [incremento, setIncremento] = useState(DEFAULTS.incremento);
+
+  // Generar tablas de 10 puntajes cada una
+  const tables = [];
+  for (let start = 0; start <= puntajeMax; start += 10) {
+    const end = Math.min(start + 9, puntajeMax);
+    const columns = ["Puntaje", "Nota"];
+    const data = [];
+    for (let p = start; p <= end; p++) {
+      const nota = calcularNota({
+        puntaje: p,
+        puntajeMax,
+        exigencia,
+        notaMin,
+        notaMax,
+        notaAprobacion,
+      });
+      data.push([p, (Math.round(nota * 10) / 10).toFixed(1)]);
+    }
+    tables.push({ range: `${start} - ${end}`, columns, data });
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="App">
+      <header className="App-header">
+        <h1>Escala de Notas</h1>
+      </header>
+      <main>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          gap: 32,
+          maxWidth: '100vw',
+          margin: '2rem auto',
+          padding: 16,
+        }}>
+          <form style={{
+            display: "grid",
+            gap: 8,
+            minWidth: 260,
+            flex: '0 0 260px',
+            position: 'sticky',
+            left: 0,
+            top: 0,
+            zIndex: 2,
+          }}>
+            <label>
+              Puntaje máximo:
+              <Input type="number" value={puntajeMax} min={1} onChange={e => setPuntajeMax(Number(e.target.value))} />
+            </label>
+            <label>
+              Exigencia (%):
+              <Input type="number" value={exigencia * 100} min={1} max={100} onChange={e => setExigencia(Number(e.target.value) / 100)} />
+            </label>
+            <label>
+              Nota mínima:
+              <Input type="number" value={notaMin} step="0.01" onChange={e => setNotaMin(Number(e.target.value))} />
+            </label>
+            <label>
+              Nota máxima:
+              <Input type="number" value={notaMax} step="0.01" onChange={e => setNotaMax(Number(e.target.value))} />
+            </label>
+            <label>
+              Nota aprobación:
+              <Input type="number" value={notaAprobacion} step="0.01" onChange={e => setNotaAprobacion(Number(e.target.value))} />
+            </label>
+            <label>
+              Incremento:
+              <IncrementSelector value={incremento} onChange={setIncremento} />
+            </label>
+          </form>
+          <div style={{
+            flex: 1,
+            overflowX: 'auto',
+            display: 'flex',
+            gap: 24,
+            paddingBottom: 8,
+            maxWidth: '100%',
+          }}>
+            {tables.map((table, idx) => (
+              <div key={table.range} style={{  }}>
+                <div style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: 4 }}>{table.range}</div>
+                <Table columns={table.columns} data={table.data} />
+              </div>
+            ))}
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;

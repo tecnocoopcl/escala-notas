@@ -1,0 +1,10 @@
+:root {
+  --ui-surface: #30343d;
+  --ui-border: #555;
+  --ui-border-subtle: #3a3f4a;
+  --ui-text: #fff;
+  --ui-text-muted: #888;
+  --ui-hover: rgba(255, 255, 255, 0.12);
+
+  --ui-radius: 6px;
+}

@@ -1,0 +1,99 @@
+@import './tokens.css';
+
+/* Input */
+
+.ui-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius);
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  color-scheme: dark;
+}
+
+.ui-input::placeholder {
+  color: var(--ui-text-muted);
+}
+
+.ui-input:focus {
+  outline: none;
+  border-color: var(--ui-border);
+}
+
+/* Select (Radix) */
+
+.ui-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius);
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ui-select__trigger:focus {
+  outline: none;
+  border-color: var(--ui-border);
+}
+
+.ui-select__trigger[data-placeholder] {
+  color: var(--ui-text-muted);
+}
+
+.ui-select__content {
+  overflow: hidden;
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: var(--ui-radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  z-index: 10;
+}
+
+.ui-select__viewport {
+  padding: 4px;
+}
+
+.ui-select__item {
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  border-radius: 4px;
+  color: var(--ui-text);
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ui-select__item[data-highlighted] {
+  background: var(--ui-hover);
+  outline: none;
+}
+
+/* Table */
+
+.ui-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ui-table th,
+.ui-table td {
+  border: 1px solid var(--ui-border-subtle);
+  padding: 0.4rem 0.7rem;
+  text-align: left;
+}
+
+.ui-table th {
+  background: var(--ui-surface);
+  font-weight: 600;
+}
